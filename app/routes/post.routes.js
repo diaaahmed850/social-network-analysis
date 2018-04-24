@@ -8,4 +8,6 @@ module.exports = (app) => {
         .get(posts.read_post)
         .put(posts.update_post)
         .delete(posts.delete_post);
+    app.route('/like')
+        .get(posts.increment_like)
 }

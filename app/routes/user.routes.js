@@ -9,6 +9,7 @@ module.exports = (app) => {
         .get(users.read_user)
         .put(users.update_user)
         .delete(users.delete_user);
-    app.route('/profile')
-        .post(users.profile_user)
+    app.route('/home')
+        .post(users.login)
+        .get(users.get_home)
 }

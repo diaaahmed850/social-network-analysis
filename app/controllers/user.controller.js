@@ -1,12 +1,12 @@
 var mongoose = require('mongoose'),
-    User = mongoose.model('Users'),
+    User = mongoose.model('User'),
     Post = mongoose.model('Post');
 
 exports.list_all_users = (req, res)=>{
     console.log(res.body)
     User.find({}, (err, user)=>{
         if (err)
-            res.send(err);
+           res .send(err);
         res.json(user);
     });
 };
@@ -22,21 +22,44 @@ exports.create_user = (req, res) => {
     });
 };
 
-exports.profile_user = (req, res) => {
-    console.log(req.body)
-    User.find(req.body, (err, user)=>{
+exports.login = (req, res) => {
+    User.findOne(req.body).populate('posts').exec((err, user)=>{
         if (err)
             res.send(err);
         if (user==''){
             res.writeHead(302, {
                 'Location': '/'
-              });
-              res.end();
+            });
+            res.end();
         }
-        else
-        res.render('post/posts',{'context':[{"message":"logged in"},{'user':user}]});
+        localStorage.setItem('user',JSON.stringify(user));
+        // user = JSON.parse(localStorage.getItem('user'))
+        // posts = user.posts
+    
+        // var posts_content = []        
+        // posts.forEach(post_id => {
+        //     Post.findById({_id:post_id},(err, post)=>{
+        //         posts_content.push(post.content);
+        //     });
+        // });
+        // console.log('///////////////')
+        // setTimeout(()=>{
+        // },1000); //to get values of database after certain time
+        // console.log(user.posts)
+        res.render('home',{'posts':user.posts});
     }); 
 };
+
+exports.get_home = (req, res)=>{
+    user = JSON.parse(localStorage.getItem('user'));
+    User.findOne(user).populate('posts').exec((err, user)=>{
+        if (err)
+            res.send(err)
+        console.log(user)
+        res.render('home',{'posts':user.posts});
+    });
+};
+
 
 exports.read_user = (req, res)=>{
 

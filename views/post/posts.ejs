@@ -1,7 +1,10 @@
-<div class="container">
-        <% include ../partial/navbar.ejs %>
-        <link rel="stylesheet" href="/assets/posts.css" type="text/css">
-        <%= context[0].message %>
+<% include ../partial/navbar.ejs %>
 
-        
+<div class="container">
+        <link rel="stylesheet" href="/assets/posts.css" type="text/css">
+        <ul>
+                <% posts.forEach((post)=>{ %>
+                        <li><%= post.content %> - <%= post.likes %></li>
+                <% });  %>
+        </ul>
 </div>

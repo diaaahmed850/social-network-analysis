@@ -1,22 +1,32 @@
 var mongoose = require('mongoose'),
-    post = mongoose.model('Post');
-    
+    Post = mongoose.model('Post');
+    User = mongoose.model('User');
+
 exports.list_all_posts = (req, res)=>{
     console.log(res.body)
     Post.find({}, (err, post)=>{
         if (err)
             res.send(err);
-        res.render('post/posts',{'post':post});
+        res.render('post/posts',{'posts':post});
     });
 };
 
 exports.create_post = (req, res) => {
-    console.log(req.body)
-    var new_post = new Post({"content":"this is post content"});
+    // console.log(req.body)
+    var new_post = new Post(req.body);
     new_post.save((err, post)=>{
         if (err)
             res.send(err)
-        // console.log(post._id)
+        var post_id = post._id
+        var user_id = JSON.parse(localStorage.getItem('user'))._id
+        //update posts array to add new post for this user
+        User.findById({_id:user_id},(err, user)=>{
+            if (err)
+                res.send(err)
+            user.posts.push(post_id);
+            user.save()
+        })
+        // console.log(id)
         res.json(post);
     });
 };
@@ -44,3 +54,26 @@ exports.delete_post = (req, res)=>{
         res.json({message: 'post successfully deleted'});
     });
 };
+
+exports.increment_like = (req, res)=>{
+
+    Post.findByIdAndUpdate({_id: req.query._id},{$inc:{likes:1}},{new:true},(err, post)=>{
+        if (err)
+            res.send(err);
+        
+        // var id = req.query._id;
+        // // console.log(post)
+        // console.log('//////////')
+        console.log(post)
+        // console.log('//////////')   
+        // res.redirect('back')
+        // res.render('home');
+
+        res.writeHead(302, {
+            'Location': '/home'
+          });
+          res.end();
+        // res.json({message: 'like successfully incremented'});
+    });
+};
+

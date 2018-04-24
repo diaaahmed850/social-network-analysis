@@ -11,12 +11,13 @@ var UserSchema = new Schema({
         type:String,
         require: 'kindly enter  your mail'
     },
-    friends:{
-        type:[Schema.Types.ObjectId]
+    password:{
+        type:String,
+        required: 'please enter your password'
     },
-    posts:{
-        type:[Schema.Types.ObjectId]
-    }
-});
+    friends:[{type:Schema.Types.ObjectId, ref:'User'}]
+    ,
+    posts:[{type:Schema.Types.ObjectId, ref: 'Post'}]
+    });
 
-module.exports = mongoose.model('Users', UserSchema)
+module.exports = mongoose.model('User', UserSchema)
