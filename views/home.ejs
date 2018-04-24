@@ -1,0 +1,24 @@
+<% include ./partial/navbar.ejs %>
+
+<div class="container">
+        <h2>hello in home page</h2>
+        
+        <form action="/posts" method="POST">
+            <label for="inputpost" class="sr-only">your post</label>
+            <input type="text" name="content" id="inputpost" class="form-control" placeholder="your post" required="">
+            <button type="submit" class="btn btn-outline-danger">submit</button>
+        </form>
+        
+        <ul>
+        <% posts.forEach((post)=>{ %>
+            <li>
+                <%= post.content %> - <%= post.likes %>
+                <form action="/like" method="GET">
+                    <input type="hidden" name='_id' value=<%= post._id %>>
+                    <button class="btn btn-outline-secondary" type="submit">LIKE</button>
+                </form>
+            </li> 
+        
+        <% });  %>
+        </ul>
+</div>
