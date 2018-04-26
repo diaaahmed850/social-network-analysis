@@ -56,24 +56,16 @@ exports.delete_post = (req, res)=>{
 };
 
 exports.increment_like = (req, res)=>{
-
-    Post.findByIdAndUpdate({_id: req.query._id},{$inc:{likes:1}},{new:true},(err, post)=>{
+    user = JSON.parse(localStorage.getItem('user'));
+    Post.findByIdAndUpdate({_id: req.query._id},{$addToSet:{'likes':user._id}},{new:true},(err, post)=>{
         if (err)
             res.send(err);
-        
-        // var id = req.query._id;
-        // // console.log(post)
-        // console.log('//////////')
+        else{   res.writeHead(302, {
+             'Location': '/home'
+             });
+            res.end();
+        }
         console.log(post)
-        // console.log('//////////')   
-        // res.redirect('back')
-        // res.render('home');
-
-        res.writeHead(302, {
-            'Location': '/home'
-          });
-          res.end();
-        // res.json({message: 'like successfully incremented'});
     });
 };
 

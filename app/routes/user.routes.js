@@ -12,4 +12,10 @@ module.exports = (app) => {
     app.route('/home')
         .post(users.login)
         .get(users.get_home)
+    app.route('/all_users')
+        .get(users.list_all_users)
+    app.route('/add_friend')
+        .get(users.add_friend)
+    app.route('/my_friends')
+        .get(users.list_my_friends)
 }

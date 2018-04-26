@@ -22,7 +22,7 @@ exports.create_user = (req, res) => {
     });
 };
 
-exports.login = (req, res) => {
+exports.login = async (req, res) => {
     User.findOne(req.body).populate('posts').exec((err, user)=>{
         if (err)
             res.send(err);
@@ -33,45 +33,47 @@ exports.login = (req, res) => {
             res.end();
         }
         localStorage.setItem('user',JSON.stringify(user));
-        // user = JSON.parse(localStorage.getItem('user'))
-        // posts = user.posts
-    
-        // var posts_content = []        
-        // posts.forEach(post_id => {
-        //     Post.findById({_id:post_id},(err, post)=>{
-        //         posts_content.push(post.content);
-        //     });
-        // });
-        // console.log('///////////////')
-        // setTimeout(()=>{
-        // },1000); //to get values of database after certain time
-        // console.log(user.posts)
-        res.render('home',{'posts':user.posts});
+        var home_users = [user]
+            User.find({'_id':{$in:user.friends}}).populate('posts').exec(async(err, users)=>{
+                if(err)
+                    res.send(err)
+                // console.log(users)
+          
+                home_users.push.apply(home_users,users);
+                    // console.log(home_posts)
+             await res.render('home',{'users':home_users});
+            
+            });
+            
+
+        
     }); 
+   
 };
 
 exports.get_home = (req, res)=>{
     user = JSON.parse(localStorage.getItem('user'));
-    User.findOne(user).populate('posts').exec((err, user)=>{
-        if (err)
+    var home_users = [user]
+    User.find({'_id':{$in:user.friends}}).populate('posts').exec(async(err, users)=>{
+        if(err)
             res.send(err)
-        console.log(user)
-        res.render('home',{'posts':user.posts});
+        // console.log(users)
+  
+        home_users.push.apply(home_users,users);
+            // console.log(home_posts)
+     await res.render('home',{'users':home_users});
+    
     });
+        // console.log(user.friends[0].posts)
 };
 
 
 exports.read_user = (req, res)=>{
 
-    User.findById(req.params.userId, (err, user)=>{
-        Post.findById(user.posts[0], (err, post)=>{
-            if (err)
-                res.send(err);
-            res.json(post);
-        });
-        // if (err)
-        //     res.send(err);
-        // res.json(user);
+    User.findById(req.params.userId).populate('friends').populate('posts').exec((err, user)=>{
+        if (err)
+            res.send(err);
+        res.render('user/user_profile',{'user':user});
     });
 };
 
@@ -89,4 +91,40 @@ exports.delete_user = (req, res)=>{
             res.send(err);
         res.json({message: 'User successfully deleted'});
     });
+};
+
+exports.list_all_users = (req, res)=>{
+    User.find({}, (err, users)=>{
+        if (err)
+            res.send(err)
+        res.render('user/all_users',{'users':users})
+    });
+};
+
+exports.add_friend = (req, res)=>{
+    user_id = JSON.parse(localStorage.getItem('user'))._id
+    User.findByIdAndUpdate({_id:user_id}, {$addToSet:{'friends':req.query._id}} ,(err, user)=>{
+        if (err)
+            res.send(err);
+            console.log(user)
+        User.findByIdAndUpdate({_id:req.query._id}, {$addToSet:{'friends':user_id}} ,(err, user)=>{
+            if (err)
+                res.send(err);
+            console.log(user)
+        
+            res.render('user/all_users',{'users':user.friends})
+        });
+    });
+
+};
+
+exports.list_my_friends = (req, res)=>{
+    user_id = JSON.parse(localStorage.getItem('user'))._id
+    User.findOne({_id:user_id}).populate('friends').exec((err, user)=>{
+        if (err)
+            res.send(err);
+        console.log(user)
+        res.render('user/my_friends',{'users':user.friends})
+    });
+
 };

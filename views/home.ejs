@@ -1,23 +1,55 @@
 <% include ./partial/navbar.ejs %>
 
+<style>
+    body{
+        background-color:#e9ebee
+    }
+</style>
+
 <div class="container">
-        <h2>hello in home page</h2>
-        
-        <form action="/posts" method="POST">
+    <br><br>
+        <form action="/posts" method="POST" 
+        style="text-align:center;    
+            text-align: right;
+            border: 2px solid;
+            border-radius: 21px;
+            padding: 2%;">
             <label for="inputpost" class="sr-only">your post</label>
-            <input type="text" name="content" id="inputpost" class="form-control" placeholder="your post" required="">
-            <button type="submit" class="btn btn-outline-danger">submit</button>
+            <textarea type="text" name="content" id="inputpost" class="form-control" placeholder="write down your post ..." required=""></textarea>
+            <br>
+            <button type="submit" class="btn btn-outline-dark " >submit</button>
         </form>
         
-        <ul>
-        <% posts.forEach((post)=>{ %>
-            <li>
-                <%= post.content %> - <%= post.likes %>
-                <form action="/like" method="GET">
-                    <input type="hidden" name='_id' value=<%= post._id %>>
-                    <button class="btn btn-outline-secondary" type="submit">LIKE</button>
-                </form>
+        <ul style="list-style: none; ">
+        <% users.forEach((user)=>{ %>
+            <% user.posts.forEach((post)=>{ %>
+            <li         style="text-align:center;    
+            border: 1px solid;
+            border-radius: 21px;
+            padding: 2%;
+            border-color: transparent;
+            margin:2%;
+            background-color:white">
+
+                <div class="row">
+                        <div class="col-8 text-left">
+                                <a href="/user/<%= user._id %>">
+                                    <%= user.name %>
+                                </a>  
+                                <br>
+                               <p> <%= post.content %> </p>
+                        </div>
+                        <div class="col-4">
+                                <form action="/like" method="GET">
+                                    <input type="hidden" name='_id' value=<%= post._id %>>
+                                    <div style="text-align:right">
+                                        <button class="btn btn-outline-primary" type="submit">LIKE  <%= post.likes.length %></button>
+                                    </div>
+                                </form>
+                        </div>
+                </div>
             </li> 
+            <% });  %>
         
         <% });  %>
         </ul>
