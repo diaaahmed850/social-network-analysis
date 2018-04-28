@@ -9,7 +9,8 @@ var UserSchema = new Schema({
     },
     email:{
         type:String,
-        require: 'kindly enter  your mail'
+        require: 'kindly enter  your mail',
+        unique: true
     },
     password:{
         type:String,
@@ -17,7 +18,17 @@ var UserSchema = new Schema({
     },
     friends:[{type:Schema.Types.ObjectId, ref:'User'}]
     ,
-    posts:[{type:Schema.Types.ObjectId, ref: 'Post'}]
+    posts:[{type:Schema.Types.ObjectId, ref: 'Post'}],
+    pic:{
+        type:String,
+        default:"https://image.flaticon.com/icons/svg/236/236831.svg"
+    },
+    birthDate:{
+        type: Date, default:Date.now
+    },
+    gender:{
+        type:Boolean, default:1
+    }
     });
 
 module.exports = mongoose.model('User', UserSchema)

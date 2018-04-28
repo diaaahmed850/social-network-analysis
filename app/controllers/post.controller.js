@@ -3,6 +3,13 @@ var mongoose = require('mongoose'),
     User = mongoose.model('User');
 
 exports.list_all_posts = (req, res)=>{
+    user = JSON.parse(localStorage.getItem('user'));
+    if (user == null){
+        res.writeHead(302, {
+            'Location': '/'
+        });
+        res.end();
+    }
     console.log(res.body)
     Post.find({}, (err, post)=>{
         if (err)
@@ -27,8 +34,10 @@ exports.create_post = (req, res) => {
             user.save()
         })
         // console.log(id)
-        res.json(post);
-    });
+        res.writeHead(302, {
+            'Location': '/home'
+        });
+        res.end();    });
 };
 
 exports.read_post = (req, res)=>{

@@ -1,5 +1,5 @@
-<% include partial/navbar.ejs %>
-
+<% include ./partial/styles.ejs %>
+<br><br><br>
 <div style="padding:0% 40%">
   <div class="container text-center">
     <form class="form-signin" action="/users" method="POST">
@@ -9,13 +9,18 @@
         <input type="email" name="email" id="inputEmail" class="form-control" placeholder="Email address" required="" autofocus="">
         <label for="inputName" class="sr-only">your name</label>
         <input type="text" name="name" id="inputName" class="form-control" placeholder="your name" required="">
-        <label for="inputPassword" class="sr-only">your password</label>
-        <input type="password" name="password" id="inputPassword" class="form-control" placeholder="your password" required="">
+        <br>
+        <input type="radio" name="gender" value="1"> Male
+        <input type="radio" name="gender" value="0"> Female        
+        <br>
+        <br>
+        <label for="inputPassword1" class="sr-only">your password</label>
+        <input type="password" name="password" id="inputPassword1" class="form-control" placeholder="your password" required="">
 
         <button class="btn btn-lg btn-primary btn-block" type="submit" >Sign up</button>
 </form>
 </div>
-
+<hr>
 <div class="container text-center">
     <form class="form-signin" action="/home" method="POST">
 

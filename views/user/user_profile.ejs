@@ -1,0 +1,114 @@
+<% include ../partial/navbar.ejs %>
+
+<div class="container">
+<div class="row" style="margin-top:2%">
+    <div class="col-12">
+        <div style="text-align:center">
+            <img  class="imgBorder mb-3" height="90" width="90" src="<%= user.pic %>" 
+            style="
+            height: 142px;
+            width: 133px;
+            border: 1px solid;
+            border-radius: 135px;
+            
+            "></div>    
+            <h3 class="text-center"> <%= user.name %> </h3>
+    <h6 class="text-center"> <%= user.email %> </h6>
+    <h6 class="text-center text-muted"> <%= user.birthDate %> </h6>
+    <h6 class="text-center"> 
+            <%if (user.gender == 1) { %>
+                <h6 class="text-center">Male</h6>
+            <% }else{ %>
+                <h6 class="text-center">Female</h6>
+            <% } %>
+    </h6>
+    </div>
+</div>
+
+    <hr>
+ 
+        <hr>
+<div class="row">
+    <div class="col-8">
+            <ul style="list-style: none; ">
+                    <% user.posts.forEach((post)=>{ %>
+                    <li         style="text-align:center;    
+                    border: 1px solid;
+                    border-radius: 21px;
+                    padding: 2%;
+                    border-color: transparent;
+                    margin:2%;
+                    background-color:white">
+        
+                        <div class="row">
+                                <div class="col-8 text-left">
+                                    <div class="row">
+                                        <div class="col-4">
+                                                <img  class="imgBorder mb-3" height="90" width="90" src="<%= user.pic %>" 
+                                                style="
+                                                height: 100px;
+                                                width: 99px;
+                                                border: 1px solid white;
+                                                border-radius: 176px;
+                                                ">                                            </div>
+                                        <div class="col-8">
+                                            
+                                        <a href="/user/<%= user._id %>">
+                                           <h5> <%= user.name %> </h5>
+                                        </a>  
+                                        <hr>
+                                       <h6> <%= post.content %> </h6>
+                                       <br>
+                                       <p class="text-muted text-left" style="font-size:13px;">posted at:  <%= post.created %> </p>
+                                    </div>
+                                       
+                                    </div>
+                                    
+                                </div>
+                                <div class="col-4">
+                                        <form action="/like" method="GET">
+                                            <input type="hidden" name='_id' value=<%= post._id %>>
+                                            <br><br><br>    
+                                            <div style="text-align:right">
+                                                <button class="btn btn-outline-primary " type="submit"><i class="far fa-thumbs-up"></i>  <%= post.likes.length %></button>
+                                            </div>
+                                        </form>
+                                </div>
+                        </div>
+                    </li> 
+                
+                <% });  %>
+                </ul>
+
+    </div>
+    <div class="col4">
+            <ul class="text-center" style="list-style: none">
+                    <h5>Friends</h5>
+                    <hr>
+                    <% user.friends.forEach((user)=>{ %>
+                        <div class="row">
+                                <div class="col-2 " >
+                                        <img  class="imgBorder mb-3" height="90" width="90" src="<%= user.pic %>" 
+                                        style="
+                                        height: 71px;
+                                        width: 70px;
+                                        border: 1px solid white;
+                                        border-radius: 176px;
+                                        ">
+                                    </div>
+                                <div class="col-10">
+                                    <br>
+                                <a href="/user/<%= user._id %>">
+                                    <%= user.name %>
+                                </a>  
+                               
+                            </div>
+                            
+                        </div>
+                    <hr>
+                        
+                    <% });  %>
+                </ul>
+    </div>
+</div>
+</div>

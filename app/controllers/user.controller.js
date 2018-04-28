@@ -3,11 +3,18 @@ var mongoose = require('mongoose'),
     Post = mongoose.model('Post');
 
 exports.list_all_users = (req, res)=>{
+    user = JSON.parse(localStorage.getItem('user'));
+    if (user == null){
+        res.writeHead(302, {
+            'Location': '/'
+        });
+        res.end();
+    }
     console.log(res.body)
-    User.find({}, (err, user)=>{
+    User.find({}, (err, users)=>{
         if (err)
            res .send(err);
-        res.json(user);
+        res.render('user/all_users',{'users':users});
     });
 };
 
@@ -17,9 +24,22 @@ exports.create_user = (req, res) => {
     new_user.save((err, user)=>{
 
         if (err)
-            res.send(err)
-        res.json(user);
-    });
+            res.json(err)
+        else{
+            localStorage.setItem('user',JSON.stringify(user));
+            var home_users = [user]
+                User.find({'_id':{$in:user.friends}}).populate('posts').exec(async(err, users)=>{
+                    if(err)
+                        res.send(err)
+                    // console.log(users)
+              
+                    home_users.push.apply(home_users,users);
+                        // console.log(home_posts)
+                 await res.render('home',{'users':home_users});
+                
+                });
+            }
+         });
 };
 
 exports.login = async (req, res) => {
@@ -53,6 +73,12 @@ exports.login = async (req, res) => {
 
 exports.get_home = (req, res)=>{
     user = JSON.parse(localStorage.getItem('user'));
+    if (user == null){
+        res.writeHead(302, {
+            'Location': '/'
+        });
+        res.end();
+    }
     var home_users = [user]
     User.find({'_id':{$in:user.friends}}).populate('posts').exec(async(err, users)=>{
         if(err)
@@ -94,6 +120,13 @@ exports.delete_user = (req, res)=>{
 };
 
 exports.list_all_users = (req, res)=>{
+    user = JSON.parse(localStorage.getItem('user'));
+    if (user == null){
+        res.writeHead(302, {
+            'Location': '/'
+        });
+        res.end();
+    }
     User.find({}, (err, users)=>{
         if (err)
             res.send(err)
@@ -102,6 +135,7 @@ exports.list_all_users = (req, res)=>{
 };
 
 exports.add_friend = (req, res)=>{
+
     user_id = JSON.parse(localStorage.getItem('user'))._id
     User.findByIdAndUpdate({_id:user_id}, {$addToSet:{'friends':req.query._id}} ,(err, user)=>{
         if (err)
@@ -119,6 +153,13 @@ exports.add_friend = (req, res)=>{
 };
 
 exports.list_my_friends = (req, res)=>{
+    user = JSON.parse(localStorage.getItem('user'));
+    if (user == null){
+        res.writeHead(302, {
+            'Location': '/'
+        });
+        res.end();
+    }
     user_id = JSON.parse(localStorage.getItem('user'))._id
     User.findOne({_id:user_id}).populate('friends').exec((err, user)=>{
         if (err)
@@ -126,5 +167,36 @@ exports.list_my_friends = (req, res)=>{
         console.log(user)
         res.render('user/my_friends',{'users':user.friends})
     });
+
+};
+exports.logout = (req, res)=>{
+    localStorage.removeItem('user');
+    res.writeHead(302, {
+        'Location': '/'
+    });
+    res.end();
+};
+
+exports.search_user = (req, res)=>{
+    var name_search,email_search;
+    param = req.query.search;
+    my_user = JSON.parse(localStorage.getItem('user'));
+    
+    if (param.indexOf("@")!=-1){
+        User.find({email:{ "$regex":param}}, (err, users)=>{
+            if (err)
+                res.send(err);
+        res.render('user/all_users',{'users':users});
+            
+        });
+    }
+    else{
+        User.find({ name: { "$regex":param, '$options' : 'i'}}, (err, users)=>{
+            if (err)
+                res.send(err);
+        res.render('user/all_users',{'users':users});
+            
+        });
+    }
 
 };

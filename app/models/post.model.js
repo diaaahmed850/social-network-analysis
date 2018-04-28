@@ -7,7 +7,10 @@ var PostSchema = new Schema({
         type:String,
         required: 'kindly enter you content',
     },
-    likes:[{type:Schema.Types.ObjectId, ref:'User'}]
+    likes:[{type:Schema.Types.ObjectId, ref:'User'}],
+    created:{
+        type: Date, default:  Date.now() + 7*24*60*60*1000
+    }
 });
 
 module.exports = mongoose.model('Post', PostSchema)

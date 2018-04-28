@@ -18,4 +18,8 @@ module.exports = (app) => {
         .get(users.add_friend)
     app.route('/my_friends')
         .get(users.list_my_friends)
+    app.route('/logout')
+        .get(users.logout)
+    app.route('/search_user')
+        .get(users.search_user)
 }

@@ -1,8 +1,13 @@
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.10/css/all.css" integrity="sha384-+d0P83n9kaQMCwj8F4RJB66tzIwOKmrdb46+porD/OvrJ+37WqIM7UoBtwHO6Nlg" crossorigin="anonymous">
+<style>
+    body{
+        background-color:#e9ebee
+    }
+</style>
 
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark" style="padding:1%">
 <div class="container">
-            
                 <a class="navbar-brand" href="/home">SNA PROJECT</a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                   <span class="navbar-toggler-icon"></span>
@@ -20,10 +25,12 @@
                     <li class="nav-item">
                             <a class="nav-link" href="/my_friends">My Friends</a>
                           </li>
-        
+                          <li class="nav-item" >
+                            <a class="nav-link"  href="/logout">Logout</a>
+                          </li>
                   </ul>
-                  <form class="form-inline my-2 my-lg-0">
-                        <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+                  <form class="form-inline my-2 my-lg-0" action="/search_user" method="GET" >
+                        <input class="form-control mr-sm-2" type="search" placeholder="Search" name="search" aria-label="Search">
                         <button class="btn btn-outline-light my-2 my-sm-0" type="submit">Search</button>
                 </form>
                 </div>

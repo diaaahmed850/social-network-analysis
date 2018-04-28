@@ -1,0 +1,38 @@
+
+<% include ../partial/navbar.ejs %>
+<br><br><br>
+<div class="container">
+        <ul style="list-style: none">
+                <% users.forEach((user)=>{ %>
+                    <div class="row">
+                                <div class="col-1">
+                                                <img  class="imgBorder mb-3" height="90" width="90" src="<%= user.pic %>" 
+                                                style="
+                                                height: 71px;
+                                                width: 70px;
+                                                border: 1px solid white;
+                                                border-radius: 176px;
+                                                ">                                </div>
+                            <div class="col-5">
+                                    <a href="/user/<%= user._id %>">
+                                       <h4> <%= user.name %> </h4>
+                                    </a>  
+                                    <h6 class="text-muted"> <%= user.email %> </h6>
+                                    
+                            </div>
+    
+    
+                            <div class="col-6">
+                                    <form action="/add_friend" method="GET">
+                                        <input type="hidden" name='_id' value=<%= user._id %>>
+                                        <button class="btn btn-outline-primary" type="submit">Add Friend</button>
+                                    </form>
+                            </div>
+                            <br>
+                            <br>
+                    </div>
+                <hr><br>
+                
+                <% });  %>
+        </ul>
+</div>
