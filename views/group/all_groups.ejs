@@ -1,0 +1,56 @@
+<% include ../partial/navbar.ejs %>
+<br><br><br>
+<div class="container">
+    <div class="row">
+        <div class="col-8">
+                <h2>All Groups</h2>
+            <ul style="style:none">
+                    <% groups.forEach((group)=>{ %>
+                        <div class="row">
+                            <div class="col-8">
+                                <br><br>
+                                        <h2> <%= group.name %> </h2>
+                                        <h5> <%= group.describtion %> </h5>
+                                        
+                            </div>
+                            <div class="col-4">
+                                    <form action="/join_group" method="GET">
+                                        <input type="hidden" name='_id' value=<%= group._id %>>
+                                        <br><br><br>    
+                                        <div style="text-align:right">
+                                            <button class="btn btn-outline-primary " type="submit">  Join</button>
+                                        </div>
+                                    </form>                            
+                            </div>
+                        </div>
+                    <% });  %>
+            </ul>
+            <br><hr>
+            <h2>My Groups</h2>
+            <ul style="style:none">
+                    <% my_groups.forEach((group)=>{ %>
+                        <a href="/all_groups/<%= group._id %>">
+                        <h2> <%= group.name %> </h2>
+                        </a>
+                        <h5> <%= group.describtion %> </h5>
+                        
+                    <% });  %>
+            </ul>
+
+        </div>
+        <div class="col-4">
+            
+            <form class="form-signin" action="/all_groups" method="POST">
+
+                <label for="grpname" class="sr-only">Group Name</label>
+                <input type="text" name="name" id="grpname" class="form-control" placeholder="Group Name..." required="" autofocus="">
+                <label for="grpdesc" class="sr-only">your password</label>
+                <input type="text" name="describtion" id="grpdesc" class="form-control" placeholder="Group Describtion..." required="">
+        
+                <button class="btn btn-lg btn-primary btn-block" type="submit" >Create</button>
+            </form>
+        </div>
+    </div>
+
+</div>
+      

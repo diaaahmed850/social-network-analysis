@@ -5,6 +5,7 @@ var express = require('express'),
     mongoose = require('mongoose'),
     User = require('./app/models/user.model'),
     Post = require('./app/models/post.model'),
+    Group = require('./app/models/group.model'),
     bodyParser = require('body-parser');
 if (typeof localStorage === "undefined" || localStorage === null) {
     var LocalStorage = require('node-localstorage').LocalStorage;
@@ -28,8 +29,10 @@ app.use('/static', express.static('assets'));
 // initialize routes
 var routes_user = require('./app/routes/user.routes')
 var routes_post = require('./app/routes/post.routes')
+var routes_group = require('./app/routes/group.routes')
 routes_user(app); 
 routes_post(app);
+routes_group(app);
 // initialize default route 
 
 app.get('/',(req, res)=>{

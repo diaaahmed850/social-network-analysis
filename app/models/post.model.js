@@ -10,7 +10,9 @@ var PostSchema = new Schema({
     likes:[{type:Schema.Types.ObjectId, ref:'User'}],
     created:{
         type: Date, default:  Date.now() + 7*24*60*60*1000
-    }
+    },
+    groups:[{type:Schema.Types.ObjectId, ref:'Group'}],
+
 });
 
 module.exports = mongoose.model('Post', PostSchema)
