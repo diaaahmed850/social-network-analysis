@@ -1,7 +1,7 @@
 module.exports = (app) => {
     const users = require('../controllers/user.controller');
     var bodyParser = require('body-parser');
-    
+    const virtualize = require('../controllers/virtualization.controller');
     app.route('/users')
         .get(users.list_all_users)
         .post(users.create_user);
@@ -22,4 +22,7 @@ module.exports = (app) => {
         .get(users.logout)
     app.route('/search_user')
         .get(users.search_user)
+    app.route('/visualize_users')
+        .get(virtualize.visualize_users)
+
 }

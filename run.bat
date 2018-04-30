@@ -1,0 +1,1 @@
+browserify --debug index.js > assets\bundle.js

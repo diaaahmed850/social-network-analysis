@@ -23,6 +23,7 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 app.set('view engine','ejs');
 app.use('/assets', express.static('assets'));
+app.use('/static', express.static('assets'));
 
 // initialize routes
 var routes_user = require('./app/routes/user.routes')

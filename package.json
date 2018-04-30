@@ -18,12 +18,17 @@
   "license": "MIT",
   "dependencies": {
     "body-parser": "^1.18.2",
+    "child_process": "^1.0.2",
     "ejs": "^2.5.9",
     "express": "^4.16.3",
     "express-session": "^1.15.6",
+    "fs": "0.0.1-security",
+    "graphdracula": "^1.2.1",
     "mongoose": "^5.0.11",
     "node-localstorage": "^1.3.1",
-    "urlencoded-parser": "^1.0.0"
+    "raphael": "^2.2.7",
+    "urlencoded-parser": "^1.0.0",
+    "util": "^0.10.3"
   },
   "devDependencies": {
     "nodemon": "^1.17.3"
