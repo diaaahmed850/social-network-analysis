@@ -2,6 +2,7 @@ var mongoose = require('mongoose'),
     Post = mongoose.model('Post');
     User = mongoose.model('User');
 const users = require('../controllers/user.controller');
+
 exports.list_all_posts = (req, res)=>{
     console.log('list_all_posts...')
     user = JSON.parse(localStorage.getItem('user'));
@@ -27,7 +28,7 @@ exports.create_post = (req, res) => {
         var user_id = JSON.parse(localStorage.getItem('user'))._id
         //update posts array to add new post for this user
         // User.findById({_id:user_id}).populate('posts').exec(async (err, user)=>{
-    User.findByIdAndUpdate({_id:user_id}, {$addToSet:{'posts':post_id}}).populate('posts').exec( async (err, user)=>{
+    User.findByIdAndUpdate({_id:user_id}, {$push:{'posts':post_id}}).exec( async (err, user)=>{
             
             if (err)
                 res.send(err)
@@ -38,7 +39,6 @@ exports.create_post = (req, res) => {
                 'Location': '/home'
             });
             res.end();
-            // });
         });
         
     });

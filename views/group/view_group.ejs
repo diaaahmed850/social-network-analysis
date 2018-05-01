@@ -27,11 +27,68 @@
             <label for="inputpost" class="sr-only">your post</label>
             <textarea type="text" name="content" id="inputpost" class="form-control" placeholder="write down your post ..." required=""></textarea>
             <br>
-            <input type="hidden" name="groups" value="<%= group._id %>">
+            <input type="hidden" name="group" value="<%= group._id %>">
             <button type="submit" class="btn btn-outline-dark " onClick="window.location.reload()" >Post</button>
         </form>
-        
-    
+        <!-- ///////////////////////////////////////////////// -->
+        <ul style="list-style: none; ">
+                <% group.users.forEach((user)=>{ %>
+                    <%if (user.posts!= null) { %>
+                        <!-- <h2><%=user.posts%></h2> -->
+                    <% user.posts.forEach((post)=>{ %>
+                        <%if (String(post.group) === String(group._id)) { %>
+                        <li         style="text-align:center;    
+                        border: 1px solid;
+                        border-radius: 21px;
+                        padding: 2%;
+                        border-color: transparent;
+                        margin:2%;
+                        background-color:white">
+            
+                            <div class="row">
+                                    <div class="col-8 text-left">
+                                        <div class="row">
+                                            <div class="col-3">
+                                                    <img  class="imgBorder mb-3" height="90" width="90" src="<%= user.pic %>" 
+                                                    style="
+                                                    height: 100px;
+                                                    width: 99px;
+                                                    border: 1px solid white;
+                                                    border-radius: 176px;
+                                                    ">                                            </div>
+                                            <div class="col-9">
+                                                
+                                            <a href="/user/<%= user._id %>">
+                                               <h5> <%= user.name %> </h5>
+                                            </a>  
+                                            <hr>
+                                           <h6> <%= post.content %> </h6>
+                                           <br>
+                                           <p class="text-muted text-left" style="font-size:13px;">posted at:  <%= post.created %> </p>
+                                        </div>
+                                           
+                                        </div>
+                                        
+                                    </div>
+                                    <div class="col-4">
+                                            <form action="/like" method="GET">
+                                                <input type="hidden" name='_id' value=<%= post._id %>>
+                                                <br><br><br>    
+                                                <div style="text-align:right">
+                                                    <button class="btn btn-outline-primary " type="submit"><i class="far fa-thumbs-up"></i>  <%= post.likes.length %></button>
+                                                </div>
+                                            </form>
+                                    </div>
+                            </div>
+                        </li> 
+                        <% } %>
+                    
+                    <% });  %>
+                    <% } %>
+                
+                <% });  %>
+                </ul>
+    <!-- //////////////////////////////////////////// -->
         </div>
         <div class="col-4">
                 <ul class="text-center" style="list-style: none">

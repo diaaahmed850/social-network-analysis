@@ -1,6 +1,8 @@
 var mongoose = require('mongoose'),
     User = mongoose.model('User'),
     Post = mongoose.model('Post');
+    Group = mongoose.model('Group');
+    
 
 exports.list_all_users = (req, res)=>{
     console.log('list_all_users...')
@@ -29,15 +31,17 @@ exports.create_user = (req, res) => {
             res.json(err)
         else{
             localStorage.setItem('user',JSON.stringify(user));
+            console.log(user)
             var home_users = [user]
-                User.find({'_id':{$in:user.friends}}).populate('posts').exec(async(err, users)=>{
-                    if(err)
-                        res.send(err)
+            //     User.find({'_id':{$in:user.friends}}).populate('posts').exec(async(err, users)=>{
+            //         if(err)
+            //             res.send(err)
               
-                    home_users.push.apply(home_users,users);
-                 await res.render('home',{'users':home_users});
+            //         home_users.push.apply(home_users,users);
                 
-                });
+            //     });
+            res.render('home',{'users':home_users});
+
             }
          });
 };
@@ -53,18 +57,20 @@ exports.login = async (req, res) => {
             res.end();
         }
         localStorage.setItem('user',JSON.stringify(user));
-        var home_users = [user]
-            User.find({'_id':{$in:user.friends}}).populate('posts').exec(async(err, users)=>{
-                if(err)
-                    res.send(err)
+        // var home_users = [user]
+        //     User.find({'_id':{$in:user.friends}}).populate('posts').exec(async(err, users)=>{
+        //         if(err)
+        //             res.send(err)
           
-                home_users.push.apply(home_users,users);
-             await res.render('home',{'users':home_users});
+        //         home_users.push.apply(home_users,users);
+        //      await res.render('home',{'users':home_users});
             
-            });
+        //     });
             
-
-        
+        res.writeHead(302, {
+            'Location': '/home'
+        });
+        res.end();        
     }); 
    
 };
@@ -87,14 +93,17 @@ exports.get_home = async (req, res)=>{
         res.end();
     }
     var home_users = [user]
-    User.find({'_id':{$in:user.friends}}).populate('posts').exec(async(err, users)=>{
+    User.find({'_id':{$in:user.friends}}).populate({path:'posts',populate: { path: 'group' }}).exec(async(err, users)=>{
         if(err)
             res.send(err)
-  
         home_users.push.apply(home_users,users);
-            // console.log(home_posts)
-        
-     await res.render('home',{'users':home_users});
+            console.log('home_posts..................')
+            console.log(home_users[0].posts[1])
+        await Group.find({}).exec(async (err, groups)=>{
+
+            await res.render('home',{'users':home_users,'groups':groups});
+
+        });
     
     });
         // console.log(user.friends[0].posts)

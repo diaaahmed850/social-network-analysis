@@ -11,7 +11,7 @@ var PostSchema = new Schema({
     created:{
         type: Date, default:  Date.now() + 7*24*60*60*1000
     },
-    groups:[{type:Schema.Types.ObjectId, ref:'Group'}],
+    group:{type:Schema.Types.ObjectId, ref:'Group'},
 
 });
 

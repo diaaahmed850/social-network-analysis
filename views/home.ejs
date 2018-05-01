@@ -23,8 +23,10 @@
         
         <ul style="list-style: none; ">
         <% users.forEach((user)=>{ %>
+            <%if (user.posts!= null) { %>
 
             <% user.posts.forEach((post)=>{ %>
+                
                 <li         style="text-align:center;    
                 border: 1px solid;
                 border-radius: 21px;
@@ -46,9 +48,19 @@
                                             ">                                            </div>
                                     <div class="col-9">
                                         
-                                    <a href="/user/<%= user._id %>">
-                                       <h5> <%= user.name %> </h5>
-                                    </a>  
+                                    <% if (post.group != null){ %>
+                                        <% groups.forEach((group)=>{ %>
+                                            <%if (String(post.group) === String(group._id)) { %>
+
+                                       <h5><a href="/user/<%= user._id %>"> <%= user.name %></a> -> <a href="/all_groups/<%= post.group %>"> <%=group.name%> </a> </h5>
+                                            <% }; %>
+                                        <% }); %>
+                                    <% } %> 
+                                    <% if (post.group == null){ %>
+
+                                       <h5><a href="/user/<%= user._id %>"> <%= user.name %></a>  </h5>
+                                    <% } %> 
+                                     
                                     <hr>
                                    <h6> <%= post.content %> </h6>
                                    <br>
@@ -63,14 +75,17 @@
                                         <input type="hidden" name='_id' value=<%= post._id %>>
                                         <br><br><br>    
                                         <div style="text-align:right">
+                                            <% if (post.likes != null){ %>
                                             <button class="btn btn-outline-primary " type="submit"><i class="far fa-thumbs-up"></i>  <%= post.likes.length %></button>
+                                            <% } %>
+
                                         </div>
                                     </form>
                             </div>
                     </div>
                 </li> 
-            
             <% });  %>
+            <% }; %>
         
         <% });  %>
         </ul>

@@ -36,11 +36,27 @@ exports.create_new_group = (req, res)=>{
 };
 
 exports.read_group = (req, res)=>{
-    Group.findById(req.params.groupId).populate('users').exec((err, group)=>{
-        if (err)
-            res.send(err);
-        res.render('group/view_group',{'group':group});
-    });
+    console.log('read_group.......')
+    user = JSON.parse(localStorage.getItem('user'));
+    // var group_users = [user]
+
+    // Group.findById(req.params.groupId).populate('users').exec((err, group)=>{
+    //     if (err)
+    //         res.send(err);
+    //     var home_users = [user]
+    //     console.log('req.params.groupId.......')
+        Group.findById(req.params.groupId).populate({
+            path: 'users',
+            populate: { path: 'posts' }
+          }).exec(async (err, group)=>{
+            if (err)
+                res.send(err);
+            console.log(user)
+            console.log(group)
+            await res.render('group/view_group',{'group':group});
+            });
+
+    // });
 };
 
 exports.join_group = (req, res)=>{
@@ -58,28 +74,29 @@ exports.join_group = (req, res)=>{
 
 exports.create_group_posts =  (req, res)=>{
     var new_post = new Post(req.body);
+    console.log('request body .........')
+    console.log(req.body)
+    console.log('request body .........')
     new_post.save(async (err, post)=>{
         if (err)
             res.send(err)
         var post_id = post._id
         var user_id = JSON.parse(localStorage.getItem('user'))._id
-        console.log(post)
-        console.log('//////////////////')
-        //update posts array to add new post for this user
-        // User.findById({_id:user_id}).populate('posts').exec(async (err, user)=>{
-    await User.findByIdAndUpdate({_id:user_id}, {$addToSet:{'posts':post_id}}, {new:true}).populate('posts').exec( async (err, user)=>{
+    await User.findByIdAndUpdate({_id:user_id}, {$push:{'posts':post_id}}, {new:true}).populate('posts').exec( async (err, user)=>{
             
             if (err)
                 res.send(err)
 
             localStorage.setItem('user',JSON.stringify(user));
-
-           await Group.findById(req.body.groups).populate('users').exec(async (err, group)=>{
+           await Group.findById(req.body.group).populate({
+            path: 'users',
+            populate: { path: 'posts' }
+          }).exec(async (err, group)=>{
             if (err)
                 res.send(err);
-                await console.log(user)
-                console.log('////////////////////')
-            res.render('group/view_group',{'group':group});
+            console.log(user)
+            console.log(group)
+            await res.render('group/view_group',{'group':group});
             });
 
         });
