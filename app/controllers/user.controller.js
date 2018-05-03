@@ -5,23 +5,6 @@ var mongoose = require('mongoose'),
     const session = require('express-session');
 const MongoStore = require('connect-mongo')(session);
 
-exports.list_all_users = (req, res)=>{
-    console.log('list_all_users...')
-    
-    user = JSON.parse(localStorage.getItem('user'));
-    if (user == null){
-        res.writeHead(302, {
-            'Location': '/'
-        });
-        res.end();
-    }
-
-    User.find({}, (err, users)=>{
-        if (err)
-           res .send(err);
-        res.render('user/all_users',{'users':users});
-    });
-};
 
 exports.create_user = (req, res) => {
     console.log('create_user...')
@@ -59,7 +42,7 @@ exports.login = async (req, res) => {
         }
         localStorage.setItem('user',JSON.stringify(user));
         console.log('User.statics.authenticate..............')
-        req.session.push('id',String(user._id))
+        // req.session.push('id',String(user._id))
         console.log(req.session)
         res.writeHead(302, {
             'Location': '/home'
@@ -69,38 +52,37 @@ exports.login = async (req, res) => {
    
 };
 
-exports.get_home = async (req, res)=>{
+exports.get_home = (req, res)=>{
     console.log('get_home')
     
-    user = JSON.parse(localStorage.getItem('user'));    
-    await User.findOne({'_id':user._id}).populate('posts').exec(async (err, user)=>{
+    user = JSON.parse(localStorage.getItem('user'));   
+
+    User.findOne({'_id':user._id}).populate('posts').exec(async (err, user)=>{
         if (err)
             res.send(err)
-        await localStorage.setItem('user',JSON.stringify(user));        
-    });
-    user = JSON.parse(localStorage.getItem('user'));
-
-    if (user == null){
-        res.writeHead(302, {
-            'Location': '/'
-        });
-        res.end();
-    }
-    var home_users = [user]
-    User.find({'_id':{$in:user.friends}}).populate({path:'posts',populate: { path: 'group' }}).exec(async(err, users)=>{
-        if(err)
-            res.send(err)
-        home_users.push.apply(home_users,users);
-            console.log('home_posts..................')
-            console.log(home_users[0].posts[1])
-        await Group.find({}).exec(async (err, groups)=>{
-
-            await res.render('home',{'users':home_users,'groups':groups});
-
-        });
+        if (user == null){
+            res.writeHead(302, {
+                'Location': '/'
+            });
+            res.end();
+        } 
+        localStorage.setItem('user',JSON.stringify(user));        
+        User.find({'_id':{$in:user.friends}}).populate({path:'posts',populate: { path: 'group' }}).exec(async(err, users)=>{
+            if(err)
+                res.send(err)
+            var home_users = [user]    
+            console.log(user)        
+            home_users.push.apply(home_users,users);
+                console.log('home_posts..................')
+                console.log(home_users[0].posts[1])
+            await Group.find({}).exec(async (err, groups)=>{
     
+                await res.render('home',{'users':home_users,'groups':groups});
+    
+            });
+
     });
-        // console.log(user.friends[0].posts)
+    });
 };
 
 
@@ -140,13 +122,11 @@ exports.list_all_users = (req, res)=>{
     User.find({}, (err, users)=>{
         if (err)
             res.send(err)
-        console.log(users)
-        console.log(user)
         user.friends.forEach(id => {
             String(id)
         });
         console.log(typeof(user.friends[0]))
-        res.render('user/all_users',{'users':users,'my_user':user.friends})
+        res.render('user/all_users',{'users':users,'my_user':user})
     });
 };
 
@@ -169,24 +149,24 @@ exports.add_friend = (req, res)=>{
 
 };
 
-exports.list_my_friends = (req, res)=>{
-    console.log('lise_my_friends....')
+// exports.list_my_friends = (req, res)=>{
+//     console.log('lise_my_friends....')
 
-    user = JSON.parse(localStorage.getItem('user'));
-    if (user == null){
-        res.writeHead(302, {
-            'Location': '/'
-        });
-        res.end();
-    }
-    user_id = JSON.parse(localStorage.getItem('user'))._id
-    User.findOne({_id:user_id}).populate('friends').exec((err, user)=>{
-        if (err)
-            res.send(err);
-        res.render('user/my_friends',{'users':user.friends})
-    });
+//     user = JSON.parse(localStorage.getItem('user'));
+//     if (user == null){
+//         res.writeHead(302, {
+//             'Location': '/'
+//         });
+//         res.end();
+//     }
+//     user_id = JSON.parse(localStorage.getItem('user'))._id
+//     User.findOne({_id:user_id}).populate('friends').exec((err, user)=>{
+//         if (err)
+//             res.send(err);
+//         res.render('user/my_friends',{'users':user.friends})
+//     });
 
-};
+// };
 exports.logout = (req, res)=>{
     localStorage.removeItem('user');
     res.writeHead(302, {
@@ -204,7 +184,7 @@ exports.search_user = (req, res)=>{
         User.find({email:{ "$regex":param}}, (err, users)=>{
             if (err)
                 res.send(err);
-        res.render('user/all_users',{'users':users});
+        res.render('user/all_users',{'users':users,'my_user':my_user});
             
         });
     }
@@ -212,11 +192,18 @@ exports.search_user = (req, res)=>{
         User.find({ name: { "$regex":param, '$options' : 'i'}}, (err, users)=>{
             if (err)
                 res.send(err);
-        res.render('user/all_users',{'users':users});
+        res.render('user/all_users',{'users':users,'my_user':my_user});
             
         });
     }
 
 };
 
-
+exports.my_profile = (req, res)=>{
+    user = JSON.parse(localStorage.getItem('user'));   
+    User.findById(user._id).populate('friends').populate('posts').exec((err, user)=>{
+        if (err)
+            res.send(err);
+        res.render('user/user_profile',{'user':user});
+    });
+};

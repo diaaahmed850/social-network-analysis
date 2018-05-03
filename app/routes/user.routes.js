@@ -16,13 +16,14 @@ module.exports = (app) => {
         .get(users.list_all_users)
     app.route('/add_friend')
         .get(users.add_friend)
-    app.route('/my_friends')
-        .get(users.list_my_friends)
+    // app.route('/my_friends')
+    //     .get(users.list_my_friends)
     app.route('/logout')
         .get(users.logout)
     app.route('/search_user')
         .get(users.search_user)
     app.route('/visualize_users')
         .get(virtualize.visualize_users)
-
+    app.route('/my_profile')
+        .get(users.my_profile)
 }

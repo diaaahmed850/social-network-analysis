@@ -25,11 +25,11 @@
     
     
                             <div class="col-6">
-                                    <% if (my_user.indexOf(String(user._id))!=-1){  %>
+                                    <% if (my_user.friends.indexOf(String(user._id))!=-1){  %>
                                                 <button class="btn btn-outline-dark disabled" disabled>Allready Friend</button>
                                                 <% }; %>
                                                
-                                                <% if (my_user.indexOf(String(user._id))==-1){  %>
+                                                <% if (my_user.friends.indexOf(String(user._id))==-1){  %>
 
                                                         <form action="/add_friend" method="GET">
                                                                 <input type="hidden" name='_id' value=<%= user._id %>>
