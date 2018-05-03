@@ -17,17 +17,17 @@
 
 
 <script type="text/javascript">
-    
-    
+
+
     var redraw;
 
 window.onload = function() {
     var width = $(document).width();
     var height = $(document).height() - 100;
 
-    /* Showcase of the Bellman-Ford search algorithm finding shortest paths 
+    /* Showcase of the Bellman-Ford search algorithm finding shortest paths
        from one point to every node */
-    
+
     /*  */
 
     /* We need to write a new node renderer function to display the computed
@@ -38,32 +38,32 @@ window.onload = function() {
             /* the Raphael set is obligatory, containing all you want to display */
             var set = r.set().push(
                 /* custom objects go here */
-                r.rect(n.point[0]-30, n.point[1]-13, 60, 44).attr({"fill": "#feb", r : "12px", "stroke-width" : n.distance == 0 ? "3px" : "1px" })).push(
-                r.text(n.point[0], n.point[1] + 10, (n.label || n.id) + "\n(" + (n.distance == undefined ? "Infinity" : n.distance) + ")"));
+                r.rect(n.point[0]-30, n.point[1]-13, 120, 44).attr({"fill": "#feb", r : "12px", "stroke-width" : n.distance == 0 ? "3px" : "1px" })).push(
+                r.text(n.point[0]+25, n.point[1] + 10, (n.label || n.id) + "\n(" + (n.distance == undefined ? "Infinity" : n.distance) + ")"));
             return set;
         };
-    
+
     var g = new Graph();
-    
+
     /* modify the edge creation to attach random weights */
     g.edgeFactory.build = function(source, target) {
 	var e = jQuery.extend(true, {}, this.template);
 	e.source = source;
 	e.target = target;
-	e.style.label = e.weight = Math.floor(Math.random() * 10) + 1;
+	//e.style.label = e.weight = Math.floor(Math.random() * 10) + 1;
 	return e;
     }
-    
+
     /* creating nodes and passing the new renderer function to overwrite the default one */
-    g.addNode("New York", {render:render}); // TODO add currying support for nicer code
+  /*  g.addNode("New York", {render:render});
     g.addNode("Berlin", {render:render});
     g.addNode("Tel Aviv", {render:render});
     g.addNode("Tokyo", {render:render});
     g.addNode("Roma", {render:render});
-    g.addNode("Madrid", {render:render});
+    g.addNode("Madrid", {render:render});*/
 
     /* connections */
-    g.addEdge("Tokyo", "Tel Aviv"/*, {weight:9, directed: true, stroke : "#bfa"}*/); // also supports directed graphs, but currently doesn't look that nice
+  /*  g.addEdge("Tokyo", "Tel Aviv" );
     g.addEdge("Tokyo", "New York");
     g.addEdge("Tokyo", "Berlin");
     g.addEdge("Tel Aviv", "Berlin");
@@ -73,9 +73,20 @@ window.onload = function() {
     g.addEdge("Berlin", "New York");
     g.addEdge("Madrid", "New York");
     g.addEdge("Madrid", "Roma");
-    g.addEdge("Madrid", "Tokyo");
+    g.addEdge("Madrid", "Tokyo");*/
+   
+  <% users.forEach((user)=>{ %>
+    g.addNode('<%= user.name %>',{render:render});
+    <% });  %>
 
-g.addEdge('<%= data.key %>', "Tokyo");
+    <% users.forEach((user)=>{ %>
+        <% user.friends.forEach((friend)=>{ %>
+          g.addEdge('<%= user.name %>','<%= friend.name %>');
+        <% });  %>
+    <% });  %>
+
+
+
 
     /* random edge weights (our undirected graph is modelled as a bidirectional graph) */
 /*    for(e in g.edges)
@@ -86,17 +97,17 @@ g.addEdge('<%= data.key %>', "Tokyo");
 */
     /* layout the graph using the Spring layout implementation */
     var layouter = new Graph.Layout.Spring(g);
-    
+
     /* draw the graph using the RaphaelJS draw implementation */
 
     /* calculating the shortest paths via Bellman Ford */
 //    bellman_ford(g, g.nodes["Berlin"]);
-    
+
     /* calculating the shortest paths via Dijkstra */
-    dijkstra(g, g.nodes["Berlin"]);
-    
+    dijkstra(g, g.nodes['<%=user_id%>']);
+
     /* calculating the shortest paths via Floyd-Warshall */
-    floyd_warshall(g, g.nodes["Berlin"]);
+    //floyd_warshall(g, g.nodes["Diaa Ahmed"]);
 
 
     /* colourising the shortest paths and setting labels */
@@ -108,14 +119,14 @@ g.addEdge('<%= data.key %>', "Tokyo");
             g.edges[e].style.stroke = "#aaa";
         }
     }
-    
+
     var renderer = new Graph.Renderer.Raphael('canvas', g, width, height);
 
     redraw = function() {
         layouter.layout();
         renderer.draw();
     };
-    
+
 /*    var pos=0;
     step = function(dir) {
         pos+=dir;
@@ -123,10 +134,10 @@ g.addEdge('<%= data.key %>', "Tokyo");
         renderer.draw();
     };*/
 };
-    
-    
-    
-    
+
+
+
+
 </script>
 
 
@@ -134,7 +145,7 @@ g.addEdge('<%= data.key %>', "Tokyo");
 
   </head>
   <div>
-      
+
     <div id="canvas"></div>
     Looks ugly? Hit <button id="redraw" onclick="redraw();">redraw</button>!<br>
     <!--<button onclick="step(-1)">Previous step</button> - <button onclick="step(1)">Next step</button>-->

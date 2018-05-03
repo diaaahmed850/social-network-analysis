@@ -7,6 +7,8 @@ var express = require('express'),
     Post = require('./app/models/post.model'),
     Group = require('./app/models/group.model'),
     bodyParser = require('body-parser');
+const session = require('express-session');
+const MongoStore = require('connect-mongo')(session);
 if (typeof localStorage === "undefined" || localStorage === null) {
     var LocalStorage = require('node-localstorage').LocalStorage;
     localStorage = new LocalStorage('./localStorage');
@@ -25,6 +27,12 @@ app.use(bodyParser.json());
 app.set('view engine','ejs');
 app.use('/assets', express.static('assets'));
 app.use('/static', express.static('assets'));
+app.use(session({
+    secret: 'work hard',
+    resave: true,
+    saveUninitialized: false,
+    store: new MongoStore({mongooseConnection: mongoose.connection})
+  }));
 
 // initialize routes
 var routes_user = require('./app/routes/user.routes')

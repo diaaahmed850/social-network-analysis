@@ -4,8 +4,10 @@
 <div class="container">
         <ul style="list-style: none">
                 <% users.forEach((user)=>{ %>
+                        <%if (String(my_user._id) !== String(user._id)) { %>
+
                     <div class="row">
-                                <div class="col-1">
+                                        <div class="col-1">
                                                 <img  class="imgBorder mb-3" height="90" width="90" src="<%= user.pic %>" 
                                                 style="
                                                 height: 71px;
@@ -23,16 +25,25 @@
     
     
                             <div class="col-6">
-                                    <form action="/add_friend" method="GET">
-                                        <input type="hidden" name='_id' value=<%= user._id %>>
-                                        <button class="btn btn-outline-primary" type="submit">Add Friend</button>
-                                    </form>
+                                    <% if (my_user.indexOf(String(user._id))!=-1){  %>
+                                                <button class="btn btn-outline-dark disabled" disabled>Allready Friend</button>
+                                                <% }; %>
+                                               
+                                                <% if (my_user.indexOf(String(user._id))==-1){  %>
+
+                                                        <form action="/add_friend" method="GET">
+                                                                <input type="hidden" name='_id' value=<%= user._id %>>
+                                                        <button class="btn btn-outline-primary" type="submit">Add Friend</button>
+                                                                
+                                                        </form>
+                                                        <% }; %>
                             </div>
                             <br>
                             <br>
                     </div>
                 <hr><br>
-                
+                <% }; %>
+
                 <% });  %>
         </ul>
 </div>

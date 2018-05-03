@@ -1,4 +1,11 @@
 exports.visualize_users = (req, res)=>{
-    res.render('visualization/users',{'data':{'key':'ahmed','value':'mohamed'}})
+  User.find({}).populate('friends').exec((err, user)=>{
+      if (err)
+          res.send(err);
+          console.log(JSON.parse(localStorage.getItem('user')).name);
+
+      res.render('visualization/users',{'users':user,'user_id':JSON.parse(localStorage.getItem('user')).name});
+  });
+
 
 };

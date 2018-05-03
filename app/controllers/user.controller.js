@@ -2,7 +2,8 @@ var mongoose = require('mongoose'),
     User = mongoose.model('User'),
     Post = mongoose.model('Post');
     Group = mongoose.model('Group');
-    
+    const session = require('express-session');
+const MongoStore = require('connect-mongo')(session);
 
 exports.list_all_users = (req, res)=>{
     console.log('list_all_users...')
@@ -57,16 +58,9 @@ exports.login = async (req, res) => {
             res.end();
         }
         localStorage.setItem('user',JSON.stringify(user));
-        // var home_users = [user]
-        //     User.find({'_id':{$in:user.friends}}).populate('posts').exec(async(err, users)=>{
-        //         if(err)
-        //             res.send(err)
-          
-        //         home_users.push.apply(home_users,users);
-        //      await res.render('home',{'users':home_users});
-            
-        //     });
-            
+        console.log('User.statics.authenticate..............')
+        req.session.push('id',String(user._id))
+        console.log(req.session)
         res.writeHead(302, {
             'Location': '/home'
         });
@@ -146,7 +140,13 @@ exports.list_all_users = (req, res)=>{
     User.find({}, (err, users)=>{
         if (err)
             res.send(err)
-        res.render('user/all_users',{'users':users})
+        console.log(users)
+        console.log(user)
+        user.friends.forEach(id => {
+            String(id)
+        });
+        console.log(typeof(user.friends[0]))
+        res.render('user/all_users',{'users':users,'my_user':user.friends})
     });
 };
 
@@ -160,8 +160,10 @@ exports.add_friend = (req, res)=>{
         User.findByIdAndUpdate({_id:req.query._id}, {$addToSet:{'friends':user_id}} ,(err, user)=>{
             if (err)
                 res.send(err);
-        
-            res.render('user/all_users',{'users':user.friends})
+            res.writeHead(302, {
+                'Location': 'user/'+String(user_id)
+            });
+            res.end();
         });
     });
 
