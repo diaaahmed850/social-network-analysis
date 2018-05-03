@@ -6,20 +6,14 @@ var mongoose = require('mongoose'),
 
 exports.list_all_groups = (req, res)=>{
     user = JSON.parse(localStorage.getItem('user'));  
-    Group.find({'users':user._id}).exec(async (err, my_groups)=>{
+    Group.find({}).exec(async (err, groups)=>{
         if (err){
             res.send(err);
         }
-        await Group.find({'users':{$ne:user._id}}).exec(async (err, groups)=>{
-            if (err){
-                res.send(err);
-            }
-            console.log(groups)
-            await res.render('group/all_groups',{'groups':groups,'my_groups':my_groups})        
-
-        });
-        
+        console.log(groups)
+        await res.render('group/all_groups',{'groups':groups,'user_id':user._id})        
     });
+        
 };
 
 exports.create_new_group = (req, res)=>{
