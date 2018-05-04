@@ -26,4 +26,10 @@ module.exports = (app) => {
         .get(virtualize.visualize_users)
     app.route('/my_profile')
         .get(users.my_profile)
+    app.route('/visualize_users_diaa')
+        .get(virtualize.visualize_users_diaa)
+    app.route('/visualize_users_diaa/:userName')
+        .get(virtualize.redraw)
+    app.route('/stat')
+        .get(virtualize.stat)
 }

@@ -27,6 +27,8 @@
     "graphdracula": "^1.2.1",
     "mongoose": "^5.0.11",
     "node-localstorage": "^1.3.1",
+    "plotly": "^1.0.6",
+    "python-shell": "^0.5.0",
     "raphael": "^2.2.7",
     "urlencoded-parser": "^1.0.0",
     "util": "^0.10.3"

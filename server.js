@@ -38,11 +38,11 @@ app.use(session({
 var routes_user = require('./app/routes/user.routes')
 var routes_post = require('./app/routes/post.routes')
 var routes_group = require('./app/routes/group.routes')
-var routes_db = require('./app/routes/database.routes')
+ 
 routes_user(app); 
 routes_post(app);
 routes_group(app);
-routes_db(app);
+ 
 // initialize default route 
 
 app.get('/',(req, res)=>{
