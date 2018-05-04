@@ -1,12 +1,15 @@
 <% include ./partial/styles.ejs %>
 <br><br><br>
-<div style="padding:0% 40%">
-  <div class="container text-center">
+<h1 class="text-center text-primary text-uppercase">Social Network Analysis</h1>
+<br><br><br>
+
+<div class="row" style="padding:0% 10%">
+  <div class="col-6 " style="border:2px solid #31317d; margin-right:2px; border-radius: 50px;padding-top:25px">
     <form class="form-signin" action="/users" method="POST">
 
-      <h1 class="h3 mb-3 font-weight-normal">Please sign up</h1>
+      <h1 class="h3 mb-3 font-weight-normal text-center text-primary">Sign Up</h1>
         <label for="inputEmail" class="sr-only">Email address</label>
-        <input type="email" name="email" id="inputEmail" class="form-control" placeholder="Email address" required="" autofocus="">
+        <input style="margin-bottom:10px" type="email" name="email" id="inputEmail" class="form-control" placeholder="Email address" required="" autofocus="">
         <label for="inputName" class="sr-only">your name</label>
         <input type="text" name="name" id="inputName" class="form-control" placeholder="your name" required="">
         <br>
@@ -15,22 +18,23 @@
         <br>
         <br>
         <label for="inputPassword1" class="sr-only">your password</label>
-        <input type="password" name="password" id="inputPassword1" class="form-control" placeholder="your password" required="">
+        <input style="margin-bottom:10px" type="password" name="password" id="inputPassword1" class="form-control" placeholder="your password" required="">
+        <div class="text-center">
+        <button class="btn btn-lg btn-outline-primary " type="submit" >Sign up</button>
+      </div>
+    </form>
+  </div>
+  <div class="col-5 " style="border:2px solid #31317d;  border-radius: 50px;padding-top:25px">
+      <form class="form-signin" action="/home" method="POST">
 
-        <button class="btn btn-lg btn-primary btn-block" type="submit" >Sign up</button>
-</form>
-</div>
-<hr>
-<div class="container text-center">
-    <form class="form-signin" action="/home" method="POST">
-
-      <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
-        <label for="inputEmail" class="sr-only">Email address</label>
-        <input type="email" name="email" id="inputEmail" class="form-control" placeholder="Email address" required="" autofocus="">
-        <label for="inputPassword" class="sr-only">your password</label>
-        <input type="password" name="password" id="inputPassword" class="form-control" placeholder="your password" required="">
-
-        <button class="btn btn-lg btn-primary btn-block" type="submit" >Sign in</button>
-</form>
-</div>
+        <h1 class="h3 mb-3 font-weight-normal text-center text-primary ">Sign In</h1>
+          <label for="inputEmail" class="sr-only">Email address</label>
+          <input style="margin-bottom:10px" type="email" name="email" id="inputEmail" class="form-control" placeholder="Email address" required="" autofocus="">
+          <label for="inputPassword" class="sr-only">your password</label>
+          <input style="margin-bottom:10px" type="password" name="password" id="inputPassword" class="form-control" placeholder="your password" required="">
+        <div class="text-center">
+          <button class="btn btn-lg btn-outline-primary " type="submit" >Sign in</button>
+        </div>
+      </form>
+  </div>
 </div>

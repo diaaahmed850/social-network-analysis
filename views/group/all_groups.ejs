@@ -3,13 +3,17 @@
 <div class="container">
     <div class="row">
         <div class="col-8">
-                <h2>All Groups</h2>
+            <div class="text-center">    
+            <h2>All Groups</h2>
+        </div>
             <ul style="style:none">
                     <% groups.forEach((group)=>{ %>
                         <div class="row">
                             <div class="col-8">
                                 <br><br>
+                                <a href="/all_groups/<%=group._id%>">
                                         <h2> <%= group.name %> </h2>
+                                    </a>
                                         <h5> <%= group.describtion %> </h5>
                                         
                             </div>
@@ -17,38 +21,64 @@
                                     <form action="/join_group" method="GET">
                                         <input type="hidden" name='_id' value=<%= group._id %>>
                                         <br><br><br>    
-                                        <div style="text-align:right">
-                                            <button class="btn btn-outline-primary " type="submit">  Join</button>
-                                        </div>
+                                        <% if (group.users.indexOf(String(user_id))!=-1){  %>
+                                            <div style="text-align:right">
+                                                <button class="btn btn-outline-dark disabled" disabled>Joined</button>
+                                            </div>                                            
+                                        <%}%>    
+                                        <% if (group.users.indexOf(String(user_id))==-1){  %>
+                                            <div style="text-align:right">
+                                                <button class="btn btn-outline-primary " >Join</button>
+                                            </div>                                            
+                                        <%}%>                                     
                                     </form>                            
                             </div>
                         </div>
                     <% });  %>
             </ul>
             <br><hr>
-            <h2>My Groups</h2>
-            <ul style="style:none">
-                    <% my_groups.forEach((group)=>{ %>
-                        <a href="/all_groups/<%= group._id %>">
-                        <h2> <%= group.name %> </h2>
-                        </a>
-                        <h5> <%= group.describtion %> </h5>
-                        
-                    <% });  %>
-            </ul>
+
 
         </div>
         <div class="col-4">
-            
+               <!-- Button trigger modal -->
+<button type="button" class="btn btn-outline-primary btn-lg btn-block" data-toggle="modal" data-target="#exampleModal">
+        <i class="fas fa-plus-circle"> Create Group </i>
+      </button>
+      
+      <!-- Modal -->
+      <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">Create Group</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
             <form class="form-signin" action="/all_groups" method="POST">
+                <div class="modal-body">
 
                 <label for="grpname" class="sr-only">Group Name</label>
                 <input type="text" name="name" id="grpname" class="form-control" placeholder="Group Name..." required="" autofocus="">
-                <label for="grpdesc" class="sr-only">your password</label>
-                <input type="text" name="describtion" id="grpdesc" class="form-control" placeholder="Group Describtion..." required="">
-        
-                <button class="btn btn-lg btn-primary btn-block" type="submit" >Create</button>
+                <label for="grpdesc" class="sr-only">Group Describtion</label>
+                <textarea type="text" name="describtion" id="grpdesc" class="form-control" placeholder="Group Describtion..." required="">
+                    </textarea>
+            </div>
+            <div class="modal-footer ">
+            <div class="row">
+                <div class="col-6">
+                <button type="button" class="btn  btn-primary btn-block" data-dismiss="modal">Close</button>
+            </div>
+            <div class="col-6">
+            <button class="btn  btn-primary btn-block" type="submit" >Create</button>
+            </div></div>
+        </div>
+            
             </form>
+          </div>
+        </div>
+      </div>            
+
         </div>
     </div>
 
